@@ -18,23 +18,6 @@ class ScriptInitialize(Generic[E]):
 
 PointAction: TypeAlias = ScriptAttr | ScriptInitialize[E]
 
-@dataclass
-class ScriptTrack(Generic[E]):
-    prop: str
-    values: SortedDict[int, Any]
-    interpolation: Interpolation
-
-    @property
-    def start(self) -> int:
-        return self.values.keys()[0]
-    
-    @property
-    def end(self) -> int:
-        return self.values.keys()[-1]
-    
-    def runner(self) -> TrackRunner[E]:
-        return TrackRunner(self)
-
 class TrackRunner(Generic[E]):
     def __init__(self, track: ScriptTrack) -> None:
         self.track = track
@@ -148,3 +131,20 @@ class _StepInterpolation(Interpolation):
         return points[points.bisect_left(time)]
 
 StepInterpolation: Interpolation = _StepInterpolation()
+
+@dataclass
+class ScriptTrack(Generic[E]):
+    prop: str
+    values: SortedDict[int, Any]
+    interpolation: Interpolation = LinearInterpolation
+
+    @property
+    def start(self) -> int:
+        return self.values.keys()[0]
+    
+    @property
+    def end(self) -> int:
+        return self.values.keys()[-1]
+    
+    def runner(self) -> TrackRunner[E]:
+        return TrackRunner(self)

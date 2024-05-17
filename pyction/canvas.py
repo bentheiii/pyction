@@ -41,7 +41,7 @@ class CanvasRunner:
         self.frame = -1
 
     def frames(self) -> Iterator[np.ndarray]:
-        for _ in range(self.canvas.n_frames):
+        for _ in range(self.canvas.n_frames+1):
             yield self._next_frame()
     
     def _next_frame(self) -> np.ndarray:
